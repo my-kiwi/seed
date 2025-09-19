@@ -1,0 +1,26 @@
+:root {
+  /** Color Palette */
+  --white: #e0e0e0;
+  --black: #121212;
+
+  /* Light theme variables (default) */
+  --bg-color: var(--white);
+  --text-color: var(--black);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark theme variables */
+    --bg-color: var(--black);
+    --text-color: var(--white);
+  }
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
