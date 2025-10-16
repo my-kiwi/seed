@@ -1,16 +1,23 @@
-import { Counter } from './Counter';
-import { GithubLink } from './GithubLink';
+import './Counter';
+import './GithubLink';
 
-export const App = (): string => {
-  return `
-    <header>
-      <h2>This is a simple vanilla TS seed</h2>
-    </header>
-    <main>
-      ${Counter()}
-    </main>
-    <footer>
-      ${GithubLink()}
-    </footer>
-    `;
-};
+class App extends HTMLElement {
+  constructor() {
+    super();
+
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.innerHTML = `
+      <header>
+        <h2>This is a simple vanilla TS seed</h2>
+      </header>
+      <main>
+        <counter-button/>
+      </main>
+      <footer>
+        <github-link/>
+      </footer>
+      `;
+  }
+}
+
+customElements.define('my-app', App);

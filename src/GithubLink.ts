@@ -8,7 +8,6 @@ const getRepoUrlFromLocation = (): string => {
   const pathParts = pathname.split('/').filter(Boolean);
 
   if (!username || pathParts.length === 0) {
-    console.error('could not build github link');
     return '';
   }
 
@@ -17,31 +16,8 @@ const getRepoUrlFromLocation = (): string => {
   return `https://github.com/${username}/${repo}`;
 };
 
-export const GithubLink = (): string => {
-  const styles = `
-    a.github-link, 
-    a.github-link:visited {
-      margin:auto;
-      display:block;
-      text-align: center;
-      padding: 1rem;
-      margin-top: 3rem;
-      color: var(--text-color);
-    }
-
-    .github-icon {
-      fill: #333;
-      transition: fill 0.2s;
-    }
-
-    .github-icon:hover {
-      fill: #000;
-      cursor: pointer;
-    }`;
-  return `
-  <style>${styles}</style>
-  <a class="github-link" href="${getRepoUrlFromLocation()}" target="_blank" aria-label="GitHub">
-    <svg
+const githubSVG = `
+  <svg
       class="github-icon"
       height="24"
       viewBox="0 0 16 16"
@@ -63,7 +39,50 @@ export const GithubLink = (): string => {
         .29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2
         0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"
       ></path>
-    </svg>
-  </a>
-`;
-};
+  </svg>`;
+
+class GithubLink extends HTMLElement {
+  private link: HTMLAnchorElement;
+
+  constructor() {
+    super();
+
+    const shadow = this.attachShadow({ mode: 'open' });
+
+    // Create button
+    this.link = document.createElement('a');
+    this.link.href = getRepoUrlFromLocation();
+    this.link.innerHTML = githubSVG;
+    this.link.classList.add('github-link');
+
+    // Optional styling
+    const style = document.createElement('style');
+    style.textContent = `
+      a.github-link, 
+      a.github-link:visited {
+        margin:auto;
+        display:block;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 3rem;
+        color: var(--text-color);
+      }
+
+      .github-icon {
+        fill: #333;
+        transition: fill 0.2s;
+      }
+
+      .github-icon:hover {
+        fill: #000;
+        cursor: pointer;
+      }
+    `;
+
+    // Add to shadow DOM
+    shadow.appendChild(style);
+    shadow.appendChild(this.link);
+  }
+}
+
+customElements.define('github-link', GithubLink);
