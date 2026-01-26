@@ -1,22 +1,31 @@
-const state = { count: 0 };
+class CounterButton extends HTMLElement {
+  private count = 0;
 
-const increaseCounter = (targetId: string) => {
-  const increase_counter_event = 'increase_counter_event';
+  constructor() {
+    super();
 
-  window.addEventListener(increase_counter_event, () => {
-    state.count++;
-    const kiwis = Array(state.count).fill('🥝');
-    document.getElementById(targetId)!.textContent = `${state.count} ${kiwis.join(' ')}`;
-  });
-  return `window.dispatchEvent(new Event('${increase_counter_event}'))`;
-};
+    const shadow = this.attachShadow({ mode: 'open' });
 
-export const Counter = () => {
-  return `
-    <p>Click here to increment:</p>
-      <button onClick="${increaseCounter('counter')}">Increase</button>
-    <p>
-      Current kiwi count: <div style='width:300px' id="counter">${state.count}</div>
-    </p>
-  `;
-};
+    // Create button
+    const button = document.createElement('button');
+    button.textContent = `Add kiwi`;
+
+    // create div to show count
+    const countDiv = document.createElement('div');
+    countDiv.textContent = `Count: ${this.count}`;
+    countDiv.style.width = '300px';
+
+    // Add to shadow DOM
+    shadow.appendChild(button);
+    shadow.appendChild(countDiv);
+
+    // Handle click
+    button.addEventListener('click', () => {
+      this.count++;
+      const kiwis = '🥝'.repeat(this.count);
+      countDiv.textContent = `Count: ${this.count} ${kiwis}`;
+    });
+  }
+}
+
+customElements.define('counter-button', CounterButton);
