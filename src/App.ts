@@ -17,6 +17,25 @@ class App extends HTMLElement {
         <github-link/>
       </footer>
       `;
+
+    const style = document.createElement('style');
+    style.textContent = `
+     :host {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      header {
+        flex-shrink: 0;
+      }
+      main {
+        flex: 1;
+      }
+      footer {
+        flex-shrink: 0;
+      }
+    `;
+    shadow.appendChild(style);
   }
 }
 
