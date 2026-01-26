@@ -5,7 +5,8 @@ const increaseCounter = (targetId: string) => {
 
   window.addEventListener(increase_counter_event, () => {
     state.count++;
-    document.getElementById(targetId)!.textContent = `${state.count}`;
+    const kiwis = Array(state.count).fill('🥝');
+    document.getElementById(targetId)!.textContent = `${state.count} ${kiwis.join(' ')}`;
   });
   return `window.dispatchEvent(new Event('${increase_counter_event}'))`;
 };
@@ -15,7 +16,7 @@ export const Counter = () => {
     <p>Click here to increment:</p>
       <button onClick="${increaseCounter('counter')}">Increase</button>
     <p>
-      Current count: <span id="counter">${state.count}</span>
+      Current kiwi count: <div style='width:300px' id="counter">${state.count}</div>
     </p>
   `;
 };
